@@ -36,4 +36,26 @@ object Main extends App {
   }
   // println(createSet(1,1,3,3))
   println(countDoubles(lines))
+
+  // part 2
+  @tailrec def commonArea(xs: String, ls: List[String]): Boolean = {
+    ls match {
+      case Nil => false
+      case head :: tail if (createSet(extractValues(head)._1, extractValues(head)._2, extractValues(head)._3, extractValues(head)._4) intersect createSet(extractValues(xs)._1, extractValues(xs)._2, extractValues(xs)._3, extractValues(xs)._4)).isEmpty
+        => commonArea(xs, tail)
+      case _ => true
+    }
+  }
+
+  def findSingle(ls: List[String]): Int = {
+    @tailrec def findSingleAcc(xs: List[String], acc: Int): Int = {
+      xs match {
+        case Nil => throw new Exception("no match")
+        case head :: tail if commonArea(head, tail) => findSingleAcc(tail, acc + 1)
+        case _ => acc
+        }
+      }
+    findSingleAcc(ls, 1)
+  }
+  println(findSingle(lines))
 }
